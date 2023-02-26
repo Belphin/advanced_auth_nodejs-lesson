@@ -32,6 +32,22 @@ class UserService {
 		return { ...tokens, user: userDto };
 	}
 
+	async login(email, password) {
+		const user = await UserModel.findOne({ email });
+		if (!user) {
+			throw ApiError.BadRequest("Incorrect login or password");
+		}
+		const isPassEquals = await bcrypt.compare(password, user.password);
+		if (!isPassEquals) {
+			throw ApiError.BadRequest("Incorrect login or password");
+		}
+		const userDto = new UserDto(user);
+		const tokens = tokenService.generateTokens({ ...userDto });
+
+		await tokenService.saveToken(userDto.id, tokens.refreshToken);
+		return { ...tokens, user: userDto };
+	}
+
 	async activate(activationLink) {
 		const user = await UserModel.findOne({ activationLink });
 		if (!user) {
