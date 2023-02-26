@@ -11,34 +11,46 @@ class UserController {
 			});
 			return res.json(userData);
 		} catch (e) {
-			console.log(e);
-			res.status(400).json({ message: "Registration Error" });
+			next(e);
 		}
 	}
 
 	async login(req, res, next) {
 		try {
-		} catch (e) {}
+		} catch (e) {
+			next(e);
+		}
 	}
 
 	async logout(req, res, next) {
 		try {
-		} catch (e) {}
+		} catch (e) {
+			next(e);
+		}
 	}
 
 	async active(req, res, next) {
 		try {
-		} catch (e) {}
+			const activationLink = req.params.link;
+			await userService.activate(activationLink);
+			return res.redirect(process.env.CLIENT_URL);
+		} catch (e) {
+			next(e);
+		}
 	}
 
 	async refresh(req, res, next) {
 		try {
-		} catch (e) {}
+		} catch (e) {
+			next(e);
+		}
 	}
 
 	async getUsers(req, res, next) {
 		try {
-		} catch (e) {}
+		} catch (e) {
+			next(e);
+		}
 	}
 }
 
